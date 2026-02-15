@@ -1,0 +1,51 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: futestats_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - futestats-network
+
+  db:
+    image: postgres:17-alpine
+    container_name: futestats_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # Garante que a API só ligue após o banco estar pronto para receber conexões
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - futestats-network
+
+volumes:
+  postgres_data:
+
+networks:
+  futestats-network:
+    driver: bridge

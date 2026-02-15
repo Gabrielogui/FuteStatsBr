@@ -1,0 +1,15 @@
+venv/
+bin/
+include/
+share/
+lib/
+IPython/
+.pytest_cache/
+.ruff_cache/
+
+# Variávis de ambiente:
+.env
+.env.local
+.env.dev
+.env.test
+.env.prod
