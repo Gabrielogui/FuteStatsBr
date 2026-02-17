@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.routes.team_routes import router as team_router
+
 
 app = FastAPI(
     title="FuteStats BR API",
@@ -8,6 +10,7 @@ app = FastAPI(
     version="0.1.0"
 )
 
+app.include_router(team_router)
 
 app.add_middleware(
     CORSMiddleware,
