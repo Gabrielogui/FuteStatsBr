@@ -32,33 +32,35 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-8">
                 
                 {/* |=======| PRINCIPAIS RANKINGS E GRÁFICOS |=======| */}
-                <div>
-                    <h4 className="text-primary uppercase text-lg font-bold">Principais Rankings</h4>
-                    <div className="grid grid-cols-2 gap-5">
+                <div className="flex flex-col gap-3">
+                    <h4 className="text-primary uppercase text-3xl font-bold">Principais Rankings</h4>
+
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
                         <div className="flex flex-col gap-5">
                             <div className="flex justify-start gap-2 border-b pb-2">
                                 <div className="bg-primary w-2 rounded-lg"></div>
                                 <h1 className="text-2xl font-semibold ">Total de Gols nos Pontos Corridos</h1>
                             </div>
-                            <div className="grid grid-cols-2 gap-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <TabelaResumidaRanking />
                                 </div>
-                                <div className="w-full mt-6">
+                                <div className="w-full">
                                     <GraficoResumidoRanking />
                                 </div>
                             </div>
                         </div>
+
                         <div className="flex flex-col gap-5">
                             <div className="flex justify-start gap-2 border-b pb-2">
                                 <div className="bg-primary w-2 rounded-lg"></div>
                                 <h1 className="text-2xl font-semibold ">Total de Pontos do Brasileirão</h1>
                             </div>
-                            <div className="grid grid-cols-2 gap-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <TabelaResumidaRanking />
                                 </div>
-                                <div className="w-full mt-6">
+                                <div className="w-full">
                                     <GraficoResumidoRanking />
                                 </div>
                             </div>

@@ -41,7 +41,7 @@ export default function GraficoResumidoRanking () {
     };
 
     return(
-        <div>
+        <div className="border rounded-2xl shadow-sm h-full">
             <ChartContainer config={chartConfig} className="w-full h-full">
                 <BarChart data={RANKING_DATA} layout="vertical" margin={{ left: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={cssVariables.border} />
