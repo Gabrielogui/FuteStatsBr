@@ -1,5 +1,7 @@
+import CompeticaoCard from "@/components/competicoes/CompeticaoCard";
 import GraficoResumidoRanking from "@/components/rankings/GraficoResumidoRanking";
 import TabelaResumidaRanking from "@/components/rankings/TabelaResumidaRanking";
+import { BarChart3, Trophy } from "lucide-react";
 
 export default function Home() {
 
@@ -18,7 +20,7 @@ export default function Home() {
 
             {/* |=======| SEÇÃO DE TIMES DESTAQUES (SÉRIE A) |=======| */}
             <div className="flex flex-col md:flex-row items-center bg-white border-b border-gray-200 py-4 px-8 rounded-md shadow-lg -mt-10 ">
-                <div className="flex justify-center text-center pl-6 md:items-center md:mr-6 min-w-max  
+                <div className="flex justify-center text-center  md:items-center md:mr-6 min-w-max  
                                 md:border-r border-gray-400 pr-6">
                     <span className="text-xs font-black text-primary uppercase tracking-widest">Série A <br/> 2026</span>
                 </div>
@@ -32,8 +34,11 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-8">
                 
                 {/* |=======| PRINCIPAIS RANKINGS E GRÁFICOS |=======| */}
-                <div className="flex flex-col gap-3">
-                    <h4 className="text-primary uppercase text-3xl font-bold">Principais Rankings</h4>
+                <div className="flex flex-col gap-3 ">
+                    <div className="flex gap-2 items-center text-primary">
+                        <BarChart3 />
+                        <h4 className="uppercase text-3xl font-bold">Principais Rankings</h4>
+                    </div>
 
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
                         <div className="flex flex-col gap-5">
@@ -69,8 +74,20 @@ export default function Home() {
                 </div>
                 
                 {/* |=======| PRINCIPAIS COMPETIÇÕES |=======| */}
-                <div>
-                    <h1>Principais competições</h1>
+                <div className="flex flex-col gap-3 ">
+                    <div className="flex gap-2 items-center text-primary">
+                        <Trophy />
+                        <h4 className=" uppercase text-3xl font-bold">Principais Competições</h4>
+                    </div>
+
+                    <div className="flex gap-2 overflow-x-auto">
+                        {Array.from({ length: 8 }).map((_, index) => ( 
+                            <div>
+                                <CompeticaoCard />
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -55,7 +55,7 @@ export default function GraficoResumidoRanking () {
                         width={100}
                     />
                     <ChartTooltip
-                        cursor={{ fill: cssVariables.gray }}
+                        cursor={{ fill: cssVariables.gray, radius: 10 }}
                         content={<ChartTooltipContent />}
                     />
                     <Bar dataKey="valor" radius={[0, 12, 12, 0]} barSize={40}>
