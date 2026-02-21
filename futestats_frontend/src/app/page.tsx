@@ -1,5 +1,8 @@
+import GraficoResumidoRanking from "@/components/rankings/GraficoResumidoRanking";
+import TabelaResumidaRanking from "@/components/rankings/TabelaResumidaRanking";
 
 export default function Home() {
+
     return (
         <div className="">
             {/* |=======| SEÇÃO PRINCIPAL (FRASE INICIAL + TEXTO + BOTÕES) |=======| */}
@@ -23,6 +26,49 @@ export default function Home() {
                     {Array.from({ length: 20 }).map((_, index) => (
                         <div key={index} className="h-16 w-16 rounded-full bg-gray-200 animate-pulse"></div>
                     ))}
+                </div>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-8">
+                
+                {/* |=======| PRINCIPAIS RANKINGS E GRÁFICOS |=======| */}
+                <div>
+                    <h4 className="text-primary uppercase text-lg font-bold">Principais Rankings</h4>
+                    <div className="grid grid-cols-2 gap-5">
+                        <div className="flex flex-col gap-5">
+                            <div className="flex justify-start gap-2 border-b pb-2">
+                                <div className="bg-primary w-2 rounded-lg"></div>
+                                <h1 className="text-2xl font-semibold ">Total de Gols nos Pontos Corridos</h1>
+                            </div>
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <TabelaResumidaRanking />
+                                </div>
+                                <div className="w-full mt-6">
+                                    <GraficoResumidoRanking />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-5">
+                            <div className="flex justify-start gap-2 border-b pb-2">
+                                <div className="bg-primary w-2 rounded-lg"></div>
+                                <h1 className="text-2xl font-semibold ">Total de Pontos do Brasileirão</h1>
+                            </div>
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <TabelaResumidaRanking />
+                                </div>
+                                <div className="w-full mt-6">
+                                    <GraficoResumidoRanking />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* |=======| PRINCIPAIS COMPETIÇÕES |=======| */}
+                <div>
+                    <h1>Principais competições</h1>
                 </div>
             </div>
         </div>

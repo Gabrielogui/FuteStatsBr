@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar";
 
 export default function Header() {
     return (
-        <header className="flex items-center justify-between bg-primary py-5 px-10 shadow-xl shadow-indigo-950/20 sticky top-0 z-50">
+        <header className="flex items-center justify-between bg-primary py-5 px-5 md:px-10 shadow-xl shadow-indigo-950/20 sticky top-0 z-50">
 
             {/* |=======| FUTURA LOGO |=======| */}
             <div className="flex items-center space-x-2 cursor-pointer">
@@ -21,21 +21,21 @@ export default function Header() {
 
                 <div className="flex gap-2 items-center text-white/80 hover:text-white transition-all cursor-pointer">
                     <Users />
-                    <span className=" text-2xl">
+                    <span className="hidden md:block text-2xl">
                         Times
                     </span>
                 </div>
 
                 <div className="flex gap-2 items-center text-white/80 hover:text-white transition-all cursor-pointer">
                     <Trophy />
-                    <span className=" text-2xl">
+                    <span className="hidden md:block overflow-hidden text-2xl">
                         Competições
                     </span>
                 </div>
 
                 <div className="flex gap-2 items-center text-white/80 hover:text-white transition-all cursor-pointer">
                     <BarChart3 />
-                    <span className=" text-2xl">
+                    <span className="hidden md:block text-2xl">
                         Rankings
                     </span>
                 </div>
