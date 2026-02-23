@@ -82,7 +82,7 @@ export default function Home() {
 
                     <div className="flex gap-2 overflow-x-auto">
                         {Array.from({ length: 8 }).map((_, index) => ( 
-                            <div>
+                            <div key={index}>
                                 <CompeticaoCard />
                             </div>
                         ))}
