@@ -18,12 +18,20 @@ async def get_teams(
     service = TeamService(db)
     return await service.list_teams(skip, limit)
 
-@router.get("/{team_id}", response_model=TeamReadWithStadium)
+@router.get("/{team_id}", response_model=TeamRead)
 async def get_team_detail(team_id: UUID, db: AsyncSession = Depends(get_db)):
     service = TeamService(db)
     team = await service.get_team(team_id)
     if not team:
         raise HTTPException(status_code=404, detail="Equipa não encontrada")
+    return team
+
+@router.get("/stadiums/{team_id}", response_model=TeamReadWithStadium)
+async def get_teams_with_stadiums(team_id: UUID, db: AsyncSession = Depends(get_db)):
+    service = TeamService(db)
+    team = await service.get_team_with_stadium(team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail="Equipe não encontrada")
     return team
 
 @router.post("/", response_model=TeamRead, status_code=status.HTTP_201_CREATED)

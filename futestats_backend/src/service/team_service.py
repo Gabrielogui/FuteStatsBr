@@ -15,6 +15,9 @@ class TeamService:
     async def get_team(self, team_id: UUID) -> Optional[Team]:
         return await self.repository.get_by_id(team_id)
 
+    async def get_team_with_stadium(self, team_id: UUID) -> Optional[Team]:
+        return await self.repository.get_by_id_with_stadium(team_id)
+
     async def create_new_team(self, team_data: TeamCreate) -> Team:
         existing = await self.repository.get_by_name(team_data.name)
         if existing:
