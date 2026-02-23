@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.routes.team_routes import router as team_router
+from src.routes.stadium_routes import router as stadium_router
 
 
 app = FastAPI(
@@ -11,6 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(team_router)
+app.include_router(stadium_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,7 +29,3 @@ async def root():
         "docs": "/docs",
         "version": "0.1.0"
     }
-
-# Exemplo de como as rotas serão organizadas futuramente
-# from src.routes import teams, championships
-# app.include_router(teams.router, prefix="/v1")
