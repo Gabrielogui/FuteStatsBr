@@ -21,3 +21,19 @@ class RegionEnum(str, Enum):
     NORDESTE = "Nordeste"
     NORTE = "Norte"
     CONTINENTAL = "Continental"
+
+class EditionFormatEnum(str, Enum):
+    POINTS = "POINTS"               # Pontos Corridos (Ex: Brasileirão atual)
+    KNOCKOUT = "KNOCKOUT"           # Mata-mata (Ex: Copa do Brasil)
+    HYBRID = "HYBRID"               # Grupos + Mata-mata (Ex: Paulistão, Champions)
+
+class MatchStatusEnum(str, Enum):
+    SCHEDULED = "SCHEDULED"
+    ONGOING = "ONGOING"
+    FINISHED = "FINISHED"
+    POSTPONED = "POSTPONED"
+
+class PhaseTypeEnum(str, Enum):
+    REGULAR_SEASON = "REGULAR_SEASON" # Rodadas de pontos corridos
+    GROUP_STAGE = "GROUP_STAGE"       # Grupos
+    PLAYOFFS = "PLAYOFFS"             # Chaveamento de mata-mata
