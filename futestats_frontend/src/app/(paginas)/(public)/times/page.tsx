@@ -1,3 +1,4 @@
+import TimeTabs from "@/components/times/TimeTabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Share2, Shield } from "lucide-react";
@@ -13,7 +14,10 @@ export default function Times() {
                     </Button>
                     <span className="text-2xl font-semibold">Voltar</span>
                 </div>
-                <div>
+                <div className="flex items-center gap-2">
+
+                    <span className="pr-2 border-r text-lg font-semibold">35.000 Seguidores</span>
+
                     <Button size={"icon"} variant={"outline"} className="cursor-pointer">
                         <Share2 />
                     </Button>
@@ -45,10 +49,12 @@ export default function Times() {
                     </div>
                 </div>
 
-                
 
             </div>
 
+            
+            <TimeTabs />
+            
         </div>
     )
 }

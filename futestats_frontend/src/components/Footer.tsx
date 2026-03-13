@@ -1,4 +1,4 @@
-import { BarChart3, Instagram, Linkedin, Mail, Phone } from "lucide-react";
+import { BarChart3, Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 
 export default function Footer() {
     return(
@@ -48,6 +48,9 @@ export default function Footer() {
                         </div>
                         <div className="hover:scale-105 hover:text-white transition-all cursor-pointer">
                             <Linkedin />
+                        </div>
+                        <div className="hover:scale-105 hover:text-white transition-all cursor-pointer">
+                            <Facebook />
                         </div>
                     </div>
                 </div>
