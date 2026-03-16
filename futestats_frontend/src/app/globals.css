@@ -9,7 +9,7 @@
   --azul-escuro: #0f172a;
   --azul-acinzentado: #1e293b;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #f0f0f0;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
