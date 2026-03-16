@@ -1,4 +1,5 @@
 import TituloCard from "./TituloCard"
+import TitulosTimeline from "./TitulosTimeline"
 
 interface Titles {
     total: number,
@@ -32,6 +33,10 @@ export default function TimeTitulos () {
                 {titles.categories.map((category) => (
                     <TituloCard key={category.id} title={category} />
                 ))}
+            </div>
+
+            <div className="w-full flex itmes-start">
+                <TitulosTimeline />
             </div>
         </div>
     )
