@@ -35,7 +35,8 @@ export default function TimeTitulos () {
                 ))}
             </div>
 
-            <div className="w-full flex itmes-start">
+            <div className="w-full flex flex-col gap-8 mt-8">
+                <h1 className="text-2xl font-bold">Timeline de Títulos</h1>
                 <TitulosTimeline />
             </div>
         </div>

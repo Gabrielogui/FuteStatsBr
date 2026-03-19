@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Info } from "lucide-react";
 import TimeGeral from "./TimeGeral";
 import TimeTitulos from "./TimeTitulos";
+import TimeCampanhas from "./TimeCampanhas";
 
 export default function TimeTabs() {
 
@@ -37,7 +38,7 @@ export default function TimeTabs() {
                 </TabsContent>
 
                 <TabsContent value="Campanhas">
-                    <p>Conteudo campanhas</p>
+                    <TimeCampanhas />
                 </TabsContent>
 
                 <TabsContent value="Linha do Tempo">
