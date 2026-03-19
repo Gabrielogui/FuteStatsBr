@@ -12,10 +12,12 @@ class Stadium(Base):
     __tablename__ = "stadiums"
 
     name    : Mapped[str] = mapped_column(String(100), unique=True, index=True, nullable=False)
+    nickname: Mapped[str] = mapped_column(String(100), nullable=False)
     city    : Mapped[str] = mapped_column(String(100), nullable=False)
     state   : Mapped[StateEnum] = mapped_column(SAEnum(StateEnum), nullable=False)
     capacity: Mapped[int] = mapped_column(Integer, nullable=False)
     year    : Mapped[int] = mapped_column(Integer)
+    adress  : Mapped[str] = mapped_column(String(100), nullable=False)
 
     teams: Mapped[List["Team"]] = relationship(
         "Team", back_populates="stadium"
