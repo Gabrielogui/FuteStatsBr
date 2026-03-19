@@ -2,14 +2,24 @@ from pydantic import BaseModel, ConfigDict, HttpUrl, Field
 from uuid import UUID
 from typing import List, Optional
 from datetime import datetime
+
 from src.schemas.stadium_schemas import StadiumRead
+
+from src.models.enums import StateEnum, ColorEnum
 
 class TeamBase(BaseModel):
     name       : str = Field(..., description="O nome da equipe", example="Esporte Clube Vitória")
     short_name : Optional[str] = Field(..., description="O nome abreviado da equipe", example="Vitória")
-    alcunha    : Optional[str] = Field(..., description="A alcunha da equipe", example="Leão da Barra")
-    year       : Optional[int] = Field(..., description="O ano de fundação da equipe", example="1900")
-    description: Optional[str] = Field(..., description="A descrição da equipe", example="Uma equipe de futebol de determinada cidade do Brasil")
+    sigla      : Optional[str] = Field(..., description="A sigla da equipe", example="VIT")
+    city       : Optional[str] = Field(..., description="A cidade da equipe", example="Salvador")
+    state      : Optional[StateEnum] = Field(..., description="O estado da equipe", example="BA")
+
+    colors        : Optional[List[ColorEnum]] = Field(..., description="As cores da equipe", example=["#000000", "#FFFFFF"])
+    alcunha       : Optional[str] = Field(..., description="A alcunha da equipe", example="Leão da Barra")
+    alcunha_colors: Optional[str] = Field(..., description="As cores da alcunha da equipe", example="Rubro-negro")
+    year          : Optional[int] = Field(..., description="O ano de fundação da equipe", example="1900")
+    mascot        : Optional[str] = Field(..., description="A mascote da equipe", example="Leão")
+    description   : Optional[str] = Field(..., description="A descrição da equipe", example="Uma equipe de futebol de determinada cidade do Brasil")
 
 class TeamCreate(TeamBase):
     stadium_id: Optional[UUID] = None

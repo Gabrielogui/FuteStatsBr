@@ -46,3 +46,7 @@ class PhaseTypeEnum(str, Enum):
     REGULAR_SEASON = "REGULAR_SEASON" # Rodadas de pontos corridos
     GROUP_STAGE = "GROUP_STAGE"       # Grupos
     PLAYOFFS = "PLAYOFFS"             # Chaveamento de mata-mata
+
+class ColorEnum(str, Enum):
+    BRANCO = "BRANCO"; PRETO = "PRETO"; AZUL = "AZUL"; VERMELHO = "VERMELHO"; VERDE = "VERDE"; AMARELO = "AMARELO"
+    LARANJA = "LARANJA"; ROSA = "ROSA"; ROXO = "ROXO"; CINZA = "CINZA"
