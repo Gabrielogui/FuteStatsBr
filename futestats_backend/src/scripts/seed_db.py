@@ -18,11 +18,13 @@ async def seed():
             stadium_id = uuid.uuid4()
             stadium = Stadium(
                 id=stadium_id,
-                name="Barradão",
+                name="Estádio Manoel Barradas",
+                nickname="Barradão",
                 city="Salvador",
                 state=StateEnum.BA,
                 capacity=35000,
-                year=1986
+                year=1986,
+                address="Avenida Artêmio valente, 0000"
             )
             session.add(stadium)
             
@@ -31,11 +33,17 @@ async def seed():
                 id=uuid.uuid4(),
                 name="Esporte Clube Vitória",
                 short_name="Vitória",
+                sigla="VIT",
+                city="Salvador",
+                state=StateEnum.BA,
+                colors=["#000000", "#FF0000"],
                 alcunha="Leão da Barra",
+                alcunha_color="Rubro-negro",
                 year=1899,
-                description="O maior do Nordeste.",
+                mascot="Leão",
+                description="O maior clube de futebol do Nordeste. Revelou diversos jogadores, como David Luiz e Hulk. Nasceu em 1899 em Salvador - BA.",
                 stadium_id=stadium_id
-                # 'colors' removido conforme solicitado
+                
             )
             session.add(team)
             
