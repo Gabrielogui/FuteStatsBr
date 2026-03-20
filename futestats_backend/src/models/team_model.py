@@ -1,5 +1,6 @@
 from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import String, Integer, ForeignKey, Enum as SAEnum
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import String, Integer, ForeignKey, JSON, Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 import uuid
@@ -20,7 +21,7 @@ class Team(Base):
     city       : Mapped[str] = mapped_column(String(100))
     state      : Mapped[StateEnum] = mapped_column(SAEnum(StateEnum), nullable=False)
 
-    colors       : Mapped[List[str]] = mapped_column(String(100))
+    colors       : Mapped[List[str]] = mapped_column(JSON, nullable=False)
     alcunha      : Mapped[str] = mapped_column(String(100))
     alcunha_color: Mapped[str] = mapped_column(String(100))
     year         : Mapped[int] = mapped_column(Integer)

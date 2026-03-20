@@ -14,12 +14,13 @@ class TeamBase(BaseModel):
     city       : Optional[str] = Field(..., description="A cidade da equipe", example="Salvador")
     state      : Optional[StateEnum] = Field(..., description="O estado da equipe", example="BA")
 
-    colors        : Optional[List[ColorEnum]] = Field(..., description="As cores da equipe", example=["#000000", "#FFFFFF"])
+    colors        : Optional[List[str]] = Field(..., description="As cores da equipe", example=["#000000", "#FFFFFF"])
     alcunha       : Optional[str] = Field(..., description="A alcunha da equipe", example="Leão da Barra")
-    alcunha_colors: Optional[str] = Field(..., description="As cores da alcunha da equipe", example="Rubro-negro")
+    alcunha_color : Optional[str] = Field(..., description="As cores da alcunha da equipe", example="Rubro-negro")
     year          : Optional[int] = Field(..., description="O ano de fundação da equipe", example="1900")
     mascot        : Optional[str] = Field(..., description="A mascote da equipe", example="Leão")
     description   : Optional[str] = Field(..., description="A descrição da equipe", example="Uma equipe de futebol de determinada cidade do Brasil")
+
 
 class TeamCreate(TeamBase):
     stadium_id: Optional[UUID] = None
@@ -35,6 +36,8 @@ class TeamRead(TeamBase):
     id: UUID
     stadium_id: Optional[UUID]
     created_at: datetime
+
+    subscribers_count: Optional[int] = Field(..., description="A quantidade de assinantes da equipe", example=1000)
 
     model_config = ConfigDict(from_attributes=True)
 
