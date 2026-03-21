@@ -7,6 +7,7 @@ from src.models.enums import StateEnum
 
 if TYPE_CHECKING:
     from .team_model import Team
+    from .photo_model import Photo
 
 class Stadium(Base):
     __tablename__ = "stadiums"
@@ -21,6 +22,13 @@ class Stadium(Base):
 
     teams: Mapped[List["Team"]] = relationship(
         "Team", back_populates="stadium"
+    )
+
+    images: Mapped[list["Photo"]] = relationship(
+        "Photo",
+        primaryjoin="and_(foreign(Photo.entity_id) == Stadium.id, Photo.entity_type == 'STADIUM')",
+        viewonly=True,
+        lazy="selectin"
     )
 
     def __repr__(self):

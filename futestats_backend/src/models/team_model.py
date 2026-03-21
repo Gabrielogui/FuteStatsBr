@@ -11,6 +11,7 @@ from src.models.enums import StateEnum
 
 if TYPE_CHECKING:
     from .stadium_model import Stadium
+    from .photo_model import Photo
 
 class Team(Base):
     __tablename__ = "teams"
@@ -32,6 +33,13 @@ class Team(Base):
 
     stadium_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("stadiums.id"))
     stadium: Mapped[Optional["Stadium"]] = relationship("Stadium", back_populates="teams")
+
+    images: Mapped[List["Photo"]] = relationship(
+        "Photo",
+        primaryjoin="and_(foreign(Photo.entity_id) == Team.id, Photo.entity_type == 'TEAM')",
+        viewonly=True,
+        lazy="selectin" # Carregamento otimizado para coleções assíncronas
+    )
 
     def __repr__(self):
         return f"<Team(name={self.name})>"

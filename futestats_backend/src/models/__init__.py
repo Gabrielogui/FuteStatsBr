@@ -3,6 +3,7 @@ from .stadium_model import Stadium
 from .team_model import Team
 from .competition_model import Competition
 from .ranking_model import RankingCategory, RankingEntry
+from .photo_model import Photo
 
 __all__ = [
     "Base",
@@ -10,5 +11,6 @@ __all__ = [
     "Team",
     "Competition",
     "RankingCategory",
-    "RankingEntry"
+    "RankingEntry",
+    "Photo"
 ]
