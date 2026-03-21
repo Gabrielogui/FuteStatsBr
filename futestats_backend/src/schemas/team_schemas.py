@@ -4,6 +4,7 @@ from typing import List, Optional
 from datetime import datetime
 
 from src.schemas.stadium_schemas import StadiumRead
+from src.schemas.photo_schemas import PhotoRead
 
 from src.models.enums import StateEnum, ColorEnum
 
@@ -38,6 +39,8 @@ class TeamRead(TeamBase):
     created_at: datetime
 
     subscribers_count: Optional[int] = Field(..., description="A quantidade de assinantes da equipe", example=1000)
+
+    images: list[PhotoRead] = []
 
     model_config = ConfigDict(from_attributes=True)
 

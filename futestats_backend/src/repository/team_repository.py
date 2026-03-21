@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import List, Optional, override
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from uuid import UUID
@@ -11,6 +11,20 @@ from src.models.team_model import Team
 class TeamRepository(BaseRepository[Team]):
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(Team, session)
+
+    @override
+    async def get_all(self, skip: int = 0, limit: int = 100) -> List[Team]:
+        query = (
+            select(self.model)
+            .offset(skip)
+            .limit(limit)
+            .options(
+                joinedload(Team.stadium),
+                selectinload(Team.images) # Carrega a lista de fotos
+            )
+        )
+        result = await self.session.execute(query)
+        return list(result.scalars().all())
 
     async def get_by_name(self, name: str) -> Optional[Team]:
         query = select(self.model).where(self.model.name == name).options(joinedload(Team.stadium))
@@ -26,12 +40,21 @@ class TeamRepository(BaseRepository[Team]):
         query = (
             select(self.model)
             .where(self.model.id == team_id)
-            .options(joinedload(Team.stadium)) # Carregamento antecipado (Eager Loading)
+            .options(
+                joinedload(Team.stadium),
+                selectinload(Team.images)
+            ) 
         )
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
 
     async def get_teams_by_stadium(self, stadium_id: UUID) -> List[Team]:
         query = select(self.model).where(self.model.stadium_id == stadium_id)
+        result = await self.session.execute(query)
+        return result.scalars().all()
+
+
+    async def get_teams_name_with_images(self):
+        query = select(self.model.short_name).options(selectinload(Team.images))
         result = await self.session.execute(query)
         return result.scalars().all()
