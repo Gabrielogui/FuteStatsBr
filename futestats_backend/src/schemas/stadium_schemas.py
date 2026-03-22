@@ -5,6 +5,8 @@ from typing import Optional
 
 from src.models.enums import StateEnum
 
+from src.schemas.photo_schemas import PhotoRead
+
 class StadiumBase(BaseModel):
     name     : str = Field(..., description="O nome do estádio", examples=["Barradão"])
     nickname : str = Field(..., description="O apelido do estádio", examples=["Barradão"])
@@ -26,5 +28,7 @@ class StadiumUpdate(StadiumBase):
 class StadiumRead(StadiumBase):
     id        : UUID
     created_at: datetime
+
+    images: list[PhotoRead] = []
     
     model_config = ConfigDict(from_attributes=True)
