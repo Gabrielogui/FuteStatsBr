@@ -37,6 +37,9 @@ class TeamRepository(BaseRepository[Team]):
             )
         )
 
+        result = await self.session.execute(query)
+        return result.scalar_one_or_none()
+
     async def get_by_name(self, name: str) -> Optional[Team]:
         query = select(self.model).where(self.model.name == name).options(joinedload(Team.stadium))
         result = await self.session.execute(query)

@@ -3,7 +3,7 @@ from typing import List, Sequence
 from sqlalchemy import select, delete, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models.image_model import Photo
+from src.models.photo_model import Photo
 
 class ImageRepository:
     def __init__(self, session: AsyncSession):

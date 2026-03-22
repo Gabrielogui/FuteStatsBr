@@ -1,4 +1,4 @@
-from sqlalchemy import String, ENUM as SAEnum
+from sqlalchemy import String, Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 import uuid
