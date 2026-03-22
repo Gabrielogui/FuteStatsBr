@@ -3,7 +3,7 @@ from sqlalchemy import String, Integer, Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.base import Base
-from src.models.enums import StateEnum
+from src.models.enums import StateEnum, EntityTypesEnum
 
 if TYPE_CHECKING:
     from .team_model import Team
@@ -26,7 +26,7 @@ class Stadium(Base):
 
     images: Mapped[list["Photo"]] = relationship(
         "Photo",
-        primaryjoin="and_(foreign(Photo.entity_id) == Stadium.id, Photo.entity_type == 'STADIUM')",
+        primaryjoin=f"and_(foreign(Photo.entity_id) == Stadium.id, Photo.entity_type == '{EntityTypesEnum.STADIUM.value}')",
         viewonly=True,
         lazy="selectin"
     )

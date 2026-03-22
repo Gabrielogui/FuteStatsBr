@@ -50,3 +50,6 @@ class PhaseTypeEnum(str, Enum):
 class ColorEnum(str, Enum):
     BRANCO = "BRANCO"; PRETO = "PRETO"; AZUL = "AZUL"; VERMELHO = "VERMELHO"; VERDE = "VERDE"; AMARELO = "AMARELO"
     LARANJA = "LARANJA"; ROSA = "ROSA"; ROXO = "ROXO"; CINZA = "CINZA"
+
+class EntityTypesEnum(str, Enum):
+    TEAM = "TEAM"; STADIUM = "STADIUM"; COMPETITION = "COMPETITION"

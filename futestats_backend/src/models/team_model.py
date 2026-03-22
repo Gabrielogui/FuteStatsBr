@@ -7,7 +7,7 @@ import uuid
 
 from src.db.base import Base
 
-from src.models.enums import StateEnum
+from src.models.enums import StateEnum, EntityTypesEnum
 
 if TYPE_CHECKING:
     from .stadium_model import Stadium
@@ -36,7 +36,7 @@ class Team(Base):
 
     images: Mapped[List["Photo"]] = relationship(
         "Photo",
-        primaryjoin="and_(foreign(Photo.entity_id) == Team.id, Photo.entity_type == 'TEAM')",
+        primaryjoin=f"and_(foreign(Photo.entity_id) == Team.id, Photo.entity_type == '{EntityTypesEnum.TEAM.value}')",
         viewonly=True,
         lazy="selectin" # Carregamento otimizado para coleções assíncronas
     )

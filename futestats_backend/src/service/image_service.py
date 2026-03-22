@@ -7,6 +7,7 @@ from typing import List, Dict, Any
 from fastapi import Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.repository.image_repository import ImageRepository
+from src.models.enums import EntityTypesEnum
 
 class ImageService:
 
@@ -17,10 +18,10 @@ class ImageService:
 
 
     # GERENCIA O UPLOAD DE IMAGENS DE UMA ENTIDADE NO TIPO FÍSICO
-    async def upload_entity_images(self, entity_type: str, entity_id: UUID, files: List[UploadFile], request: Request) -> List[UUID]:
+    async def upload_entity_images(self, entity_type: EntityTypesEnum, entity_id: UUID, files: List[UploadFile], request: Request) -> List[UUID]:
         
         # Organização de pastas: src/static/images/{entity_type}/{entity_id}
-        entity_folder = entity_type.lower()
+        entity_folder = entity_type.value.lower()
         folder_path = os.path.join(self.IMAGE_BASE_PATH, entity_folder, str(entity_id))
         os.makedirs(folder_path, exist_ok=True)
 
