@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
@@ -48,3 +48,13 @@ async def delete_stadium(stadium_id: UUID, db: AsyncSession = Depends(get_db)):
     success = await service.remove_stadium(stadium_id)
     if not success:
         raise HTTPException(status_code=404, detail="Estádio não encontrado")
+    
+@router.post("/{stadium_id}/images", status_code=status.HTTP_201_CREATED)
+async def upload_stadium_images(
+    stadium_id: UUID,
+    images: list[UploadFile] = File(...),
+    request: Request = None,
+    db: AsyncSession = Depends(get_db),
+):
+    service = StadiumService(db)
+    return await service.upload_stadium_images(stadium_id, images, request)

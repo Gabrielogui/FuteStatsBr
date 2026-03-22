@@ -1,13 +1,17 @@
+from fastapi import UploadFile, Request, HTTPException
 from typing import List, Optional
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.repository.team_repository import TeamRepository
 from src.schemas.team_schemas import TeamCreate, TeamUpdate
 from src.models.team_model import Team
+from src.service.image_service import ImageService
+from src.models.enums import EntityTypesEnum
 
 class TeamService:
     def __init__(self, session: AsyncSession):
         self.repository = TeamRepository(session)
+        self.image_service = ImageService(session)
 
     async def list_teams(self, skip: int = 0, limit: int = 100) -> List[Team]:
         return await self.repository.get_all(skip=skip, limit=limit)
@@ -35,3 +39,15 @@ class TeamService:
 
     async def remove_team(self, team_id: UUID) -> bool:
         return await self.repository.delete(team_id)
+
+    async def upload_team_image(self, team_id: UUID, files: List[UploadFile], request: Request):
+        team = await self.get_team(team_id)
+        if not team:
+            raise HTTPException(status_code=404, detail="Equipe nao encontrada")
+        
+        return await self.image_service.upload_entity_images(
+            entity_type=EntityTypesEnum.TEAM,
+            entity_id=team_id,
+            files=files,
+            request=request
+        )

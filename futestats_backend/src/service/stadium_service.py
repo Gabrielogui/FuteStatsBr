@@ -1,3 +1,4 @@
+from fastapi import UploadFile, Request, HTTPException
 from typing import List, Optional
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -5,10 +6,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.repository.stadium_repository import StadiumRepository
 from src.schemas.stadium_schemas import StadiumCreate, StadiumUpdate
 from src.models.stadium_model import Stadium
+from src.service.image_service import ImageService
+from src.models.enums import EntityTypesEnum
 
 class StadiumService:
     def __init__(self, session: AsyncSession):
         self.repository = StadiumRepository(session)
+        self.image_service = ImageService(session)
 
     async def list_stadiums(self, skip: int = 0, limit: int = 100) -> List[Stadium]:
         return await self.repository.get_all(skip=skip, limit=limit)
@@ -32,3 +36,16 @@ class StadiumService:
 
     async def remove_stadium(self, stadium_id: UUID) -> bool:
         return await self.repository.delete(stadium_id)
+    
+
+    async def upload_stadium_images(self, stadium_id: UUID, files: List[UploadFile], request: Request):
+        stadium = await self.get_stadium(stadium_id)
+        if not stadium:
+            raise HTTPException(status_code=404, detail="Estadio não encontrado")
+        
+        return await self.image_service.upload_entity_images(
+            entity_type=EntityTypesEnum.STADIUM,
+            entity_id=stadium_id,
+            files=files,
+            request=request
+        )

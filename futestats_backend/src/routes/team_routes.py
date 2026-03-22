@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, Request, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
@@ -56,3 +56,14 @@ async def delete_team(team_id: UUID, db: AsyncSession = Depends(get_db)):
     success = await service.remove_team(team_id)
     if not success:
         raise HTTPException(status_code=404, detail="Equipa não encontrada")
+    
+
+@router.post("/{team_id}/images", status_code=status.HTTP_201_CREATED)
+async def upload_team_images(
+    team_id: UUID, 
+    files: List[UploadFile] = File(...), 
+    request: Request = None, 
+    db: AsyncSession = Depends(get_db)
+):
+    service = TeamService(db)
+    return await service.upload_team_image(team_id, files, request)
