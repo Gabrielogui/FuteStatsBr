@@ -6,6 +6,7 @@ lib/
 IPython/
 .pytest_cache/
 .ruff_cache/
+src/static
 
 # Variávis de ambiente:
 .env

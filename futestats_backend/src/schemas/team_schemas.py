@@ -38,7 +38,7 @@ class TeamRead(TeamBase):
     stadium_id: Optional[UUID]
     created_at: datetime
 
-    subscribers_count: Optional[int] = Field(..., description="A quantidade de assinantes da equipe", example=1000)
+    subscribers_count: Optional[int] = Field(None, description="A quantidade de assinantes da equipe", example=1000)
 
     images: list[PhotoRead] = []
 
