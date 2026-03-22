@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+import os
 
 from src.routes.team_routes import router as team_router
 from src.routes.stadium_routes import router as stadium_router
@@ -10,6 +13,10 @@ app = FastAPI(
     description="Estatísticas e Rankings do Futebol Brasileiro",
     version="0.1.0"
 )
+
+
+os.makedirs("src/static/images", exist_ok=True)
+app.mount("/static", StaticFiles(directory="src/static"), name="static") 
 
 app.include_router(team_router)
 app.include_router(stadium_router)
