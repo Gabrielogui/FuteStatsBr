@@ -25,6 +25,17 @@ class TeamRepository(BaseRepository[Team]):
         )
         result = await self.session.execute(query)
         return list(result.scalars().all())
+    
+    @override
+    async def get_by_id(self, id):
+        query = (
+            select(self.model)
+            .where(self.model.id == id)
+            .options(
+                joinedload(Team.stadium),
+                selectinload(Team.images) 
+            )
+        )
 
     async def get_by_name(self, name: str) -> Optional[Team]:
         query = select(self.model).where(self.model.name == name).options(joinedload(Team.stadium))
