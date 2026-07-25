@@ -17,7 +17,12 @@ class StandingsService:
         self.edition_repo = EditionRepository(session)
         self.match_repo   = MatchRepository(session)
 
-    async def calculate_edition_standings(self, edition_id: UUID, until_round: Optional[int] = None) -> StandingsTableResponse:
+    async def calculate_edition_standings(
+        self,
+        edition_id: UUID,
+        start_round: Optional[int] = None, 
+        until_round: Optional[int] = None
+    ) -> StandingsTableResponse:
         
         # 1. Busca a edição e seus times via Repositório
         edition = await self.edition_repo.get_with_relations(edition_id)
@@ -30,7 +35,8 @@ class StandingsService:
         # 2. Busca partidas finalizadas via Repositório
         matches = await self.match_repo.get_finished_matches_by_edition(
             edition_id=edition_id, 
-            until_round=until_round
+            start_round=start_round,
+            until_round=until_round,
         )
 
         # 3. Executa o cálculo através do Engine especializado

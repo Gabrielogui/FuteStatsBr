@@ -41,12 +41,13 @@ async def get_editions_by_competition(
 @router.get("/{edition_id}/table", response_model=StandingsTableResponse)
 async def get_edition_table(
     edition_id: UUID,
+    start_round: Optional[int] = None,
     until_round: Optional[int] = None,
     db: AsyncSession = Depends(get_db)
 ):
     """Calcula a tabela de classificação oficial da edição (com suporte a filtro de rodada)."""
     service = StandingsService(db)
-    return await service.calculate_edition_standings(edition_id, until_round)
+    return await service.calculate_edition_standings(edition_id, start_round, until_round)
 
 @router.post("/{edition_id}/teams", response_model=EditionResponse)
 async def add_teams_to_edition(
