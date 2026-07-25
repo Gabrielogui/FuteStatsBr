@@ -1,0 +1,44 @@
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
+from uuid import UUID
+
+from src.db.session import get_db
+from src.schemas.edition_schemas import EditionCreate, EditionResponse, EditionTeamsUpdate
+from src.service.edition_service import EditionService
+
+router = APIRouter(prefix="/editions", tags=["Edições (Anos dos Campeonatos)"])
+
+@router.post("/", response_model=EditionResponse, status_code=status.HTTP_201_CREATED)
+async def create_edition(
+    payload: EditionCreate,
+    db: AsyncSession = Depends(get_db)
+):
+    service = EditionService(db)
+    return await service.create_edition(payload)
+
+@router.get("/{edition_id}", response_model=EditionResponse)
+async def get_edition(
+    edition_id: UUID,
+    db: AsyncSession = Depends(get_db)
+):
+    service = EditionService(db)
+    return await service.get_by_id(edition_id)
+
+@router.get("/competition/{competition_id}", response_model=List[EditionResponse])
+async def get_editions_by_competition(
+    competition_id: UUID,
+    db: AsyncSession = Depends(get_db)
+):
+    service = EditionService(db)
+    return await service.get_by_competition(competition_id)
+
+@router.post("/{edition_id}/teams", response_model=EditionResponse)
+async def add_teams_to_edition(
+    edition_id: UUID,
+    payload: EditionTeamsUpdate,
+    db: AsyncSession = Depends(get_db)
+):
+    """Associa uma lista de times à edição informada."""
+    service = EditionService(db)
+    return await service.add_teams_to_edition(edition_id, payload.team_ids)

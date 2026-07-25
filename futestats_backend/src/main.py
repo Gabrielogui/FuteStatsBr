@@ -6,6 +6,11 @@ import os
 
 from src.routes.team_routes import router as team_router
 from src.routes.stadium_routes import router as stadium_router
+from src.routes.competition_routes import router as competition_router
+from src.routes.edition_routes import router as edition_router
+from src.routes.phase_routes import router as phase_router
+from src.routes.round_routes import router as round_router
+
 
 
 app = FastAPI(
@@ -20,6 +25,11 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 app.include_router(team_router)
 app.include_router(stadium_router)
+app.include_router(competition_router)
+app.include_router(edition_router)
+app.include_router(phase_router)
+app.include_router(round_router)
+
 
 app.add_middleware(
     CORSMiddleware,
