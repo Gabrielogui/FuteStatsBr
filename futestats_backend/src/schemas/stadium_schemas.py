@@ -32,3 +32,16 @@ class StadiumRead(StadiumBase):
     images: list[PhotoRead] = []
     
     model_config = ConfigDict(from_attributes=True)
+
+class StadiumSimpleResponse(BaseModel):
+    id: UUID
+    name: str
+    nickname: str
+    city: str
+    state: StateEnum
+
+    class Config:
+        from_attributes = True
+
+
+# TODO: COLOCAR NOME DA CLASSE STADIUM READ PARA 'STADIUM REPSONSE'

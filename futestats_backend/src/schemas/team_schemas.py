@@ -27,10 +27,10 @@ class TeamCreate(TeamBase):
     stadium_id: Optional[UUID] = None
 
 class TeamUpdate(TeamBase):
-    name: Optional[str]
-    short_name: Optional[str]
-    alcunha: Optional[str]
-    year: Optional[int]
+    name       : Optional[str]
+    short_name : Optional[str]
+    alcunha    : Optional[str]
+    year       : Optional[int]
     description: Optional[str]
 
 class TeamRead(TeamBase):
@@ -46,3 +46,16 @@ class TeamRead(TeamBase):
 
 class TeamReadWithStadium(TeamRead):
     stadium: Optional[StadiumRead] = None
+
+class TeamSimpleResponse(BaseModel):
+    id        : UUID = Field(..., description="O ID da equipe", )
+    name      : str  = Field(..., description="O nome da equipe", examples=["Esporte Clube Vitória"] )
+    short_name: str  = Field(..., description="O nome abreviado da equipe", examples=["Vitória"] )
+    sigla     : str  = Field(..., description="A sigla da equipe", examples=["VIT"] )
+    state     : StateEnum = Field(..., description="O estado da equipe", examples=["BA"] )
+
+
+    class Config:
+        from_attributes = True
+
+# TODO: COLOCAR NOME DA CLASSE 'TEAM READ' PARA 'TEAM RESPONSE'
