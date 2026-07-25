@@ -53,3 +53,13 @@ class ColorEnum(str, Enum):
 
 class EntityTypesEnum(str, Enum):
     TEAM = "TEAM"; STADIUM = "STADIUM"; COMPETITION = "COMPETITION"
+
+class StandingsZoneEnum(str, Enum):
+    CHAMPION            = "CHAMPION"            # Campeão
+    LIBERTADORES_DIRECT = "LIBERTADORES_DIRECT" # G4/G6 Direto
+    LIBERTADORES_PRE    = "LIBERTADORES_PRE"    # Pré-Libertadores
+    SUDAMERICANA        = "SUDAMERICANA"        # Copa Sul-Americana
+    PROMOTION           = "PROMOTION"           # Acesso/Subida de Divisão (Série B -> A)
+    RELEGATION          = "RELEGATION"          # Rebaixamento
+    QUALIFIED           = "QUALIFIED"           # Classificado para próxima fase (Estaduais)
+    NEUTRAL             = "NEUTRAL"             # Sem zona especial

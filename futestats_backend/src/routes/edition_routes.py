@@ -1,11 +1,16 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from src.db.session import get_db
+
 from src.schemas.edition_schemas import EditionCreate, EditionResponse, EditionTeamsUpdate
+from src.schemas.standings_schemas import StandingsTableResponse
+
 from src.service.edition_service import EditionService
+from src.service.standing_service import StandingsService
+
 
 router = APIRouter(prefix="/editions", tags=["Edições (Anos dos Campeonatos)"])
 
@@ -32,6 +37,16 @@ async def get_editions_by_competition(
 ):
     service = EditionService(db)
     return await service.get_by_competition(competition_id)
+
+@router.get("/{edition_id}/table", response_model=StandingsTableResponse)
+async def get_edition_table(
+    edition_id: UUID,
+    until_round: Optional[int] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Calcula a tabela de classificação oficial da edição (com suporte a filtro de rodada)."""
+    service = StandingsService(db)
+    return await service.calculate_edition_standings(edition_id, until_round)
 
 @router.post("/{edition_id}/teams", response_model=EditionResponse)
 async def add_teams_to_edition(
