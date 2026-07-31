@@ -1,5 +1,6 @@
 from typing import List, Optional
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
@@ -35,5 +36,31 @@ class MatchRepository(BaseRepository[Match]):
                 query = query.where(Round.number.between(start_round, until_round))
             
 
+        result = await self.session.execute(query)
+        return list(result.scalars().all())
+
+
+    async def get_finished_matches_by_phase(self, phase_id: UUID) -> List[Match]:
+        """Busca partidas finalizadas de uma fase específica (ex: Grupo A do Paulistão)."""
+        query = (
+            select(Match)
+            .where(Match.phase_id == phase_id)
+            .where(Match.status == MatchStatusEnum.FINISHED)
+        )
+        result = await self.session.execute(query)
+        return list(result.scalars().all())
+
+    async def get_matches_by_phase_with_relations(self, phase_id: UUID) -> List[Match]:
+        """Busca todas as partidas de uma fase carregando times, estádio e rodada."""
+        query = (
+            select(Match)
+            .where(Match.phase_id == phase_id)
+            .options(
+                selectinload(Match.home_team),
+                selectinload(Match.away_team),
+                selectinload(Match.stadium),
+                selectinload(Match.round)
+            )
+        )
         result = await self.session.execute(query)
         return list(result.scalars().all())

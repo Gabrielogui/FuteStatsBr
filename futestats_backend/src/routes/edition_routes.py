@@ -49,6 +49,18 @@ async def get_edition_table(
     service = StandingsService(db)
     return await service.calculate_edition_standings(edition_id, start_round, until_round)
 
+from src.schemas.bracket_schemas import BracketResponse
+from src.service.bracket_service import BracketService
+
+@router.get("/{edition_id}/bracket", response_model=BracketResponse)
+async def get_edition_bracket(
+    edition_id: UUID,
+    db: AsyncSession = Depends(get_db)
+):
+    """Retorna a árvore de mata-mata completa da edição de Copa (Oitavas -> Quartas -> Semi -> Final)."""
+    service = BracketService(db)
+    return await service.get_edition_bracket(edition_id)
+
 @router.post("/{edition_id}/teams", response_model=EditionResponse)
 async def add_teams_to_edition(
     edition_id: UUID,

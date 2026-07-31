@@ -20,6 +20,10 @@ class Match(Base):
     # Placar
     home_score: Mapped[int] = mapped_column(Integer, default=0)
     away_score: Mapped[int] = mapped_column(Integer, default=0)
+
+    # Placar de disputa de pênaltes
+    home_penalty_score: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, default=None)
+    away_penalty_score: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, default=None)
     
     # Chaves Estrangeiras
     edition_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("editions.id"))

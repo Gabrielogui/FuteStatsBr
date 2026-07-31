@@ -57,6 +57,7 @@ class EditionService:
             )
         return edition
 
+    # TODO: CONFERIR SE A COMPETIÇÃO ESTÁ CADASTRADA
     async def get_by_competition(self, competition_id: UUID) -> Sequence[Edition]:
         return await self.edition_repo.get_by_competition(competition_id)
 
