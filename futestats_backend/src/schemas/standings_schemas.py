@@ -40,5 +40,6 @@ class StandingsTableResponse(BaseModel):
     edition_id  : UUID
     edition_name: str
     year        : int
+    start_round : Optional[int] = None
     until_round : Optional[int] = None
     standings   : List[TeamStandingResponse]

@@ -7,6 +7,7 @@ from src.schemas.standings_schemas import StandingsTableResponse
 
 from src.repository.edition_repository import EditionRepository
 from src.repository.match_repository import MatchRepository
+from src.repository.phase_repository import PhaseRepository
 
 from src.engine.standings_calculator import StandingsCalculator
 
@@ -16,6 +17,8 @@ class StandingsService:
         self.session      = session
         self.edition_repo = EditionRepository(session)
         self.match_repo   = MatchRepository(session)
+        self.phase_repo   = PhaseRepository(session)
+
 
     async def calculate_edition_standings(
         self,
@@ -47,6 +50,29 @@ class StandingsService:
             edition_id=edition.id,
             edition_name=edition.name,
             year=edition.year,
+            start_round=start_round,
             until_round=until_round,
+            standings=standings
+        )
+
+    async def calculate_phase_standings(
+        self, 
+        phase_id: UUID
+    ) -> StandingsTableResponse:
+        """Calcula a tabela de classificação específica de uma FASE (ex: Grupo A, 1º Turno)."""
+        phase = await self.phase_repo.get_by_id(phase_id)
+        if not phase:
+            raise HTTPException(status_code=404, detail="Fase não encontrada.")
+
+        edition = await self.edition_repo.get_with_relations(phase.edition_id)
+        matches = await self.match_repo.get_finished_matches_by_phase(phase_id, with_relations=True)
+
+        calculator = StandingsCalculator(edition)
+        standings = calculator.calculate(matches)
+
+        return StandingsTableResponse(
+            edition_id=edition.id,
+            edition_name=f"{edition.name} - {phase.name}",
+            year=edition.year,
             standings=standings
         )
