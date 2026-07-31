@@ -60,7 +60,7 @@ class BracketService:
                 detail="Fase não encontrada."
             )
 
-        matches = await self.match_repo.get_matches_by_phase_with_relations(phase_id)
+        matches = await self.match_repo.get_finished_matches_by_phase(phase_id, with_relations=True)
         
         return self.calculator.calculate_phase_confrontos(
             phase_id=phase.id,
