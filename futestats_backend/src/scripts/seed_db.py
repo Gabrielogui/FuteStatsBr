@@ -19,6 +19,8 @@ from src.models.enums import (
     MatchStatusEnum
 )
 
+# TODO: Padronizar os seeds
+
 async def seed():
     """
     Script para popular o banco de dados com uma edição completa do Brasileirão 2024.
