@@ -70,11 +70,15 @@ class EditionService:
                 detail="Edição não encontrada."
             )
 
-        async with self.session.begin():
-            for team_id in team_ids:
-                team = await self.team_repo.get_by_id(team_id)
-                if team and team not in edition.teams:
-                    edition.teams.append(team)
-            self.session.add(edition)
+        # Tirando elementos duplicados
+        unique_team_ids = list(dict.fromkeys(team_ids))
+        
+        for team_id in unique_team_ids:
+            team = await self.team_repo.get_by_id(team_id)
+            if team and team not in edition.teams:
+                edition.teams.append(team)
+
+        self.session.add(edition)
+        await self.session.commit()
 
         return await self.edition_repo.get_with_relations(edition_id)
