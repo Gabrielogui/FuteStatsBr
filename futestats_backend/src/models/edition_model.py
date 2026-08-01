@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from src.models.match_model import Match
     from src.models.team_model import Team
 
+# |=======| TABELAS ASSOCIATIVAS |=======|
 # Tabela associativa para Times em uma Edição
 edition_teams = Table(
     "edition_teams",
@@ -19,6 +20,21 @@ edition_teams = Table(
     Column("team_id", ForeignKey("teams.id", ondelete="CASCADE"), primary_key=True),
 )
 
+edition_champions = Table(
+    "edition_champions",
+    Base.metadata,
+    Column("edition_id", ForeignKey("editions.id", ondelete="CASCADE"), primary_key=True),
+    Column("team_id", ForeignKey("teams.id", ondelete="CASCADE"), primary_key=True),
+)
+
+edition_runners_up = Table(
+    "edition_runners_up",
+    Base.metadata,
+    Column("edition_id", ForeignKey("editions.id", ondelete="CASCADE"), primary_key=True),
+    Column("team_id", ForeignKey("teams.id", ondelete="CASCADE"), primary_key=True),
+)
+
+# |=======| TABELA DE EDIÇÃO |=======|
 class Edition(Base):
     __tablename__ = "editions"
 
@@ -37,7 +53,10 @@ class Edition(Base):
     teams      : Mapped[List["Team"]] = relationship("Team", secondary=edition_teams)
     phases     : Mapped[List["Phase"]] = relationship("Phase", back_populates="edition", cascade="all, delete-orphan")
     matches    : Mapped[List["Match"]] = relationship("Match", back_populates="edition")
+    champions  : Mapped[List["Team"]] = relationship("Team", secondary=edition_champions)
+    runners_up : Mapped[List["Team"]] = relationship("Team", secondary=edition_runners_up)
 
+# |=======| TABELA DE FASES |=======|
 class Phase(Base):
     __tablename__ = "phases"
 
@@ -50,7 +69,7 @@ class Phase(Base):
 
     rounds: Mapped[List["Round"]] = relationship("Round", back_populates="phase", cascade="all, delete-orphan")
 
-
+# |=======| TABELA DE RODADAS |=======|
 class Round(Base):
     __tablename__ = "rounds"
 

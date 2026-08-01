@@ -4,8 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
 from src.db.session import get_db
+
 from src.service.team_service import TeamService
+from src.service.title_service import TitleService
+
 from src.schemas.team_schemas import TeamCreate, TeamRead, TeamReadWithStadium, TeamUpdate
+from src.schemas.title_schemas import TeamTitlesResponse
+
 
 router = APIRouter(prefix="/teams", tags=["Teams"])
 
@@ -33,6 +38,15 @@ async def get_teams_with_stadiums(team_id: UUID, db: AsyncSession = Depends(get_
     if not team:
         raise HTTPException(status_code=404, detail="Equipe não encontrada")
     return team
+
+@router.get("/{team_id}/titles", response_model=TeamTitlesResponse, tags=["Times", "Títulos"])
+async def get_team_titles(
+    team_id: UUID,
+    db: AsyncSession = Depends(get_db)
+):
+    """Retorna a Sala de Troféus completa do clube com a contagem de títulos agrupada por campeonato."""
+    service = TitleService(db)
+    return await service.get_team_titles(team_id)
 
 @router.post("/", response_model=TeamRead, status_code=status.HTTP_201_CREATED)
 async def create_team(team_in: TeamCreate, db: AsyncSession = Depends(get_db)):

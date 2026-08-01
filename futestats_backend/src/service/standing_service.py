@@ -73,7 +73,7 @@ class StandingsService:
         if edition.format == EditionFormatEnum.KNOCKOUT:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Edições no formato Mata-Mata não possuem tabela de classificação. Utilize o endpoint GET /editions/{ id }/bracket."
+                detail="Edições no formato Mata-Mata não possuem tabela de classificação. Utilize o endpoint GET /phase/{ id }/bracket."
             )
 
         matches = await self.match_repo.get_finished_matches_by_phase(phase_id, with_relations=True)

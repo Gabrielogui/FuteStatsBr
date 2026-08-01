@@ -7,9 +7,14 @@ from src.db.session import get_db
 
 from src.schemas.edition_schemas import EditionCreate, EditionResponse, EditionTeamsUpdate
 from src.schemas.standings_schemas import StandingsTableResponse
+from src.schemas.bracket_schemas import BracketResponse
+from src.schemas.title_schemas import SetEditionChampionsRequest
 
+from src.service.bracket_service import BracketService
 from src.service.edition_service import EditionService
 from src.service.standing_service import StandingsService
+from src.service.title_service import TitleService
+
 
 
 router = APIRouter(prefix="/editions", tags=["Edições (Anos dos Campeonatos)"])
@@ -49,9 +54,6 @@ async def get_edition_table(
     service = StandingsService(db)
     return await service.calculate_edition_standings(edition_id, start_round, until_round)
 
-from src.schemas.bracket_schemas import BracketResponse
-from src.service.bracket_service import BracketService
-
 @router.get("/{edition_id}/bracket", response_model=BracketResponse)
 async def get_edition_bracket(
     edition_id: UUID,
@@ -60,6 +62,16 @@ async def get_edition_bracket(
     """Retorna a árvore de mata-mata completa da edição de Copa (Oitavas -> Quartas -> Semi -> Final)."""
     service = BracketService(db)
     return await service.get_edition_bracket(edition_id)
+
+@router.put("/{edition_id}/champions", status_code=status.HTTP_200_OK, tags=["Edições (Anos dos Campeonatos)", "Títulos"])
+async def set_edition_champions(
+    edition_id: UUID,
+    payload: SetEditionChampionsRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    """Define ou atualiza os campeões e vices de uma edição (suporta títulos divididos)."""
+    service = TitleService(db)
+    return await service.set_edition_champions(edition_id, payload)
 
 @router.post("/{edition_id}/teams", response_model=EditionResponse)
 async def add_teams_to_edition(
