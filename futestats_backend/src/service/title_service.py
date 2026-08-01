@@ -7,12 +7,14 @@ from src.repository.edition_repository import EditionRepository
 from src.repository.competition_repository import CompetitionRepository
 from src.repository.team_repository import TeamRepository
 from src.schemas.title_schemas import (
+    CompetitionTopWinnersResponse,
     SetEditionChampionsRequest,
     CompetitionChampionsResponse,
     EditionChampionItem,
     TeamTitlesResponse,
     TeamTitleSummary,
-    TitleDetailItem
+    TitleDetailItem,
+    TopWinnerItem
 )
 from src.schemas.team_schemas import TeamSimpleResponse
 from src.schemas.comepetition_schemas import CompetitionRead
@@ -58,8 +60,6 @@ class TitleService:
                 team = await self.team_repo.get_by_id(team_id)
                 if not team:
                     raise HTTPException(status_code=404, detail=f"Time vice ID {team_id} não encontrado.")
-                if team in edition.runners_up:
-                    raise HTTPException(status_code=404, datail=f"O time ID {team_id} já é campeão da edição.")
                 runners_up.append(team)
 
         
@@ -142,4 +142,65 @@ class TitleService:
             team=TeamSimpleResponse.model_validate(team),
             total_titles_count=total_titles_count,
             titles_by_competition=summary_list
+        )
+
+
+    async def get_competition_top_winners(self, competition_id: UUID) -> CompetitionTopWinnersResponse:
+        """Retorna o ranking dos maiores campeões de uma competição ordenados por quantidade de títulos."""
+        competition = await self.comp_repo.get_by_id(competition_id)
+        if not competition:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, 
+                detail="Competição não encontrada."
+            )
+
+        editions = await self.edition_repo.get_champions_by_competition(competition_id)
+
+        # Dict para acumular títulos e anos por clube: {team_id: {"team": Team, "years": [2020, 2024]}}
+        winners_map: Dict[UUID, Dict] = {}
+        total_editions_count = 0
+
+        for ed in editions:
+            if ed.champions:
+                total_editions_count += 1
+                for team in ed.champions:
+                    if team.id not in winners_map:
+                        winners_map[team.id] = {
+                            "team": team,
+                            "years": []
+                        }
+                    winners_map[team.id]["years"].append(ed.year)
+
+        # Ordena os anos de cada time do mais antigo ao mais recente
+        ranking_items = []
+        for team_id, data in winners_map.items():
+            years_sorted = sorted(data["years"])
+            ranking_items.append({
+                "team": data["team"],
+                "titles_count": len(years_sorted),
+                "years": years_sorted
+            })
+
+        # Ordena o ranking: 1º quem tem mais títulos, 2º em caso de empate quem ganhou o primeiro há mais tempo
+        ranking_items.sort(
+            key=lambda x: (x["titles_count"], -x["years"][0] if x["years"] else 0), 
+            reverse=True
+        )
+
+        # Atribui posições e monta DTOs
+        final_ranking = []
+        for idx, item in enumerate(ranking_items, start=1):
+            final_ranking.append(
+                TopWinnerItem(
+                    position=idx,
+                    team=TeamSimpleResponse.model_validate(item["team"]),
+                    titles_count=item["titles_count"],
+                    years=item["years"]
+                )
+            )
+
+        return CompetitionTopWinnersResponse(
+            competition=CompetitionRead.model_validate(competition),
+            total_editions=total_editions_count,
+            ranking=final_ranking
         )

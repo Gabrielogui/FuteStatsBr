@@ -49,4 +49,18 @@ class TeamTitlesResponse(BaseModel):
     total_titles_count   : int
     titles_by_competition: List[TeamTitleSummary]
 
-# TODO: MAIORES CAMPEÕES DE UMA COMPETIÇÃO
+# |=======| ITEM DO RANKING DOS MAIORES CAMPEÕES DE UMA COMPETIÇÃO |=======|
+class TopWinnerItem(BaseModel):
+    position    : int
+    team        : TeamSimpleResponse
+    titles_count: int
+    years       : List[int] = Field(..., description="Anos em que o clube foi campeão")
+
+    class Config:
+        from_attributes = True
+
+# |=======| RESPOSTA DO RANKING DOS MAIORES CAMPEÕES DE UMA COMPETIÇÃO |=======|
+class CompetitionTopWinnersResponse(BaseModel):
+    competition   : CompetitionRead
+    total_editions: int
+    ranking       : List[TopWinnerItem]

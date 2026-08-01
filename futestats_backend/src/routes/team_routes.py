@@ -39,7 +39,7 @@ async def get_teams_with_stadiums(team_id: UUID, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=404, detail="Equipe não encontrada")
     return team
 
-@router.get("/{team_id}/titles", response_model=TeamTitlesResponse, tags=["Times", "Títulos"])
+@router.get("/{team_id}/titles", response_model=TeamTitlesResponse, tags=["Títulos"])
 async def get_team_titles(
     team_id: UUID,
     db: AsyncSession = Depends(get_db)

@@ -8,7 +8,7 @@ from src.models.enums import CompetitionTypeEnum
 
 from src.schemas.comepetition_schemas import CompetitionCreate, CompetitionRead
 from src.schemas.photo_schemas import PhotoRead
-from src.schemas.title_schemas import CompetitionChampionsResponse
+from src.schemas.title_schemas import CompetitionChampionsResponse, CompetitionTopWinnersResponse
 
 from src.service.competition_service import CompetitionService
 from src.service.title_service import TitleService
@@ -54,6 +54,15 @@ async def get_competition_champions(
     """Retorna a galeria histórica de campeões e vices de uma competição ano a ano."""
     service = TitleService(db)
     return await service.get_competition_champions(competition_id)
+
+@router.get("/{competition_id}/top-winners", response_model=CompetitionTopWinnersResponse, tags=["Competições", "Títulos"])
+async def get_competition_top_winners(
+    competition_id: UUID,
+    db: AsyncSession = Depends(get_db)
+):
+    """Retorna o ranking dos clubes com mais títulos na história da competição."""
+    service = TitleService(db)
+    return await service.get_competition_top_winners(competition_id)
 
 @router.post("/{comp_id}/logo", response_model=PhotoRead, status_code=status.HTTP_201_CREATED)
 async def upload_competition_logo(
