@@ -10,6 +10,7 @@ from src.routes.competition_routes import router as competition_router
 from src.routes.edition_routes import router as edition_router
 from src.routes.phase_routes import router as phase_router
 from src.routes.round_routes import router as round_router
+from src.routes.matche_routes import router as matche_router
 
 
 
@@ -29,6 +30,7 @@ app.include_router(competition_router)
 app.include_router(edition_router)
 app.include_router(phase_router)
 app.include_router(round_router)
+app.include_router(matche_router)
 
 
 app.add_middleware(

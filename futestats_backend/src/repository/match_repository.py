@@ -3,10 +3,13 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
+from datetime import datetime
 
 from src.models.match_model import Match
 from src.models.edition_model import Round
 from src.models.enums import MatchStatusEnum
+from src.models.edition_model import Edition
+
 from src.repository.base_repository import BaseRepository
 
 class MatchRepository(BaseRepository[Match]):
@@ -59,4 +62,57 @@ class MatchRepository(BaseRepository[Match]):
         result = await self.session.execute(query)
         return list(result.scalars().all())
 
+    async def get_h2h_matches(
+        self,
+        team1_id: UUID,
+        team2_id: UUID,
+        competition_id: Optional[UUID] = None,
+        stadium_id: Optional[UUID] = None,
+        only_home_team_id: Optional[UUID] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None
+    ) -> List[Match]:
+        """
+        Busca todas as partidas finalizadas entre dois times aplicando filtros dinâmicos.
+        """
+        # Jogos onde os times se enfrentaram (independente de mandante/visitante)
+        query = (
+            select(Match)
+            .where(Match.status == MatchStatusEnum.FINISHED)
+            .where(
+                ((Match.home_team_id == team1_id) & (Match.away_team_id == team2_id)) |
+                ((Match.home_team_id == team2_id) & (Match.away_team_id == team1_id))
+            )
+        )
+
+        # Filtro: Apenas partidas onde um time específico jogou como mandante
+        if only_home_team_id:
+            query = query.where(Match.home_team_id == only_home_team_id)
+
+        # Filtro: Competição
+        if competition_id:
+            query = query.join(Match.edition).where(Edition.competition_id == competition_id)
+
+        # Filtro: Estádio
+        if stadium_id:
+            query = query.where(Match.stadium_id == stadium_id)
+
+        # Filtro: Intervalo de Datas
+        if start_date:
+            query = query.where(Match.date >= start_date)
+        if end_date:
+            query = query.where(Match.date <= end_date)
+
+        # Previne erro MissingGreenlet carregando as relações necessárias para os Schemas
+        query = query.options(
+            selectinload(Match.home_team),
+            selectinload(Match.away_team),
+            selectinload(Match.stadium),
+            selectinload(Match.edition),
+            selectinload(Match.phase),
+            selectinload(Match.round)
+        ).order_by(Match.date.desc())
+
+        result = await self.session.execute(query)
+        return list(result.scalars().all())   
     
