@@ -108,7 +108,7 @@ class MatchRepository(BaseRepository[Match]):
             selectinload(Match.home_team),
             selectinload(Match.away_team),
             selectinload(Match.stadium),
-            selectinload(Match.edition),
+            selectinload(Match.edition).selectinload(Edition.competition),
             selectinload(Match.phase),
             selectinload(Match.round)
         ).order_by(Match.date.desc())

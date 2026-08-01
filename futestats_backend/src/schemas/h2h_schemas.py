@@ -14,6 +14,7 @@ class H2HBiggestWinResponse(BaseModel):
     edition_name    : str
     home_team       : TeamSimpleResponse
     away_team       : TeamSimpleResponse
+    stadium         : Optional[StadiumSimpleResponse] = None
     home_score      : int
     away_score      : int
     score_difference: int
@@ -40,6 +41,17 @@ class H2HMatchItemResponse(BaseModel):
     class Config:
         from_attributes = True
 
+# |=======| ESTÁDIO OU COMPETIÇÃO PRESENTE NO CONFRONTO |=======| 
+class EntityMatchCountResponse(BaseModel):
+    id   : UUID
+    name : str
+    count: int
+
+# |=======| PLACAR FREQUENTE |=======|
+class FrequentScoreResponse(BaseModel):
+    score: str # Ex: "1 x 1"
+    count: int
+
 # |=======| RESPOSTA COMPLETA DO RETROSPECTO |=======|
 class H2HSummaryResponse(BaseModel):
     team1: TeamSimpleResponse
@@ -52,17 +64,32 @@ class H2HSummaryResponse(BaseModel):
     draws        : int
     
     # Gols e Saldos
-    team1_goals    : int
-    team2_goals    : int
-    goal_difference: int # Saldo do Team 1 em relação ao Team 2
+    team1_goals            : int
+    team2_goals            : int
+    goal_difference        : int # Saldo do Team 1 em relação ao Team 2
+    average_goals_per_match: float
     
     # Aproveitamentos %
     team1_win_rate: float
     team2_win_rate: float
     
+    # Placar mais frequente e jogo com mais gols
+    most_frequent_score  : Optional[FrequentScoreResponse] = None
+    match_with_most_goals: Optional[H2HBiggestWinResponse] = None
+
     # Maiores Goleadas
-    biggest_win_team1: Optional[H2HBiggestWinResponse] = None
-    biggest_win_team2: Optional[H2HBiggestWinResponse] = None
+    biggest_win_team1     : Optional[H2HBiggestWinResponse] = None
+    biggest_win_team2     : Optional[H2HBiggestWinResponse] = None
+    biggest_home_win_team1: Optional[H2HBiggestWinResponse] = None
+    biggest_away_win_team1: Optional[H2HBiggestWinResponse] = None
+
+    # Métricas Temporais
+    year_with_most_matches  : Optional[int] = None
+    average_matches_per_year: float = 0.0
+    
+    # Estádios e Competições do confronto
+    stadiums_played    : List[EntityMatchCountResponse] = []
+    competitions_played: List[EntityMatchCountResponse] = []
     
     # Histórico de Jogos
     matches: List[H2HMatchItemResponse]
