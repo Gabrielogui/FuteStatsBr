@@ -3,6 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from uuid import UUID
 
+from src.models.enums import EditionFormatEnum
+
 from src.schemas.standings_schemas import StandingsTableResponse
 
 from src.repository.edition_repository import EditionRepository
@@ -60,11 +62,20 @@ class StandingsService:
         phase_id: UUID
     ) -> StandingsTableResponse:
         """Calcula a tabela de classificação específica de uma FASE (ex: Grupo A, 1º Turno)."""
+
+        
         phase = await self.phase_repo.get_by_id(phase_id)
         if not phase:
             raise HTTPException(status_code=404, detail="Fase não encontrada.")
 
         edition = await self.edition_repo.get_with_relations(phase.edition_id)
+
+        if edition.format == EditionFormatEnum.KNOCKOUT:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Edições no formato Mata-Mata não possuem tabela de classificação. Utilize o endpoint GET /editions/{ id }/bracket."
+            )
+
         matches = await self.match_repo.get_finished_matches_by_phase(phase_id, with_relations=True)
 
         calculator = StandingsCalculator(edition)

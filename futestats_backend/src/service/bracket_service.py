@@ -3,6 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from uuid import UUID
 
+
+from src.models.enums import EditionFormatEnum
+
 from src.repository.edition_repository import EditionRepository
 from src.repository.phase_repository import PhaseRepository
 from src.repository.match_repository import MatchRepository
@@ -26,6 +29,12 @@ class BracketService:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Edição não encontrada."
+            )
+
+        if edition.format == EditionFormatEnum.POINTS:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Edições no formato Pontos Corridos não possuem chaveamento. Utilize o endpoint GET /editions/{ id}/table."
             )
 
         phases = await self.phase_repo.get_by_edition(edition_id)
